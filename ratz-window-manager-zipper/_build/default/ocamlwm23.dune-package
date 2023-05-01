@@ -1,0 +1,7 @@
+(lang dune 3.7)
+(name ocamlwm23)
+(sections (lib .) (bin ../../bin) (doc ../../doc/ocamlwm23))
+(files
+ (lib (META dune-package opam))
+ (bin (ocamlwm23))
+ (doc (README.md README.org)))

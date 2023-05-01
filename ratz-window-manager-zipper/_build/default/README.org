@@ -1,0 +1,200 @@
+#+title: Projet Principes de la Programmation 2022-2023
+#+subtitle: Un gestionnaire de fenêtre fonctionnel
+
+#+DATE:
+
+#+OPTIONS: toc:nil lang:fr
+
+
+* Introduction
+
+Le but de ce projet est de programmer une preuve de concept pour un gestionnaire
+de fenêtres [[https://fr.wikipedia.org/wiki/Gestionnaire_de_fen%C3%AAtres_par_pavage][en mosaïque]] où les fenêtres du bureau sont décrites par un
+arbre. En particulier pour permettre un accès rapide à la fenêtre active, on
+utilisera un /zipper/ d'arbre.
+
+Un gestionnaire de fenêtres est un logiciel qui permet d'afficher et d'organiser
+le placement des fenêtres des différentes applications. Il permet aussi de
+redimensionner les fenêtres, de les réduire ou de maximiser l'une d'elles qui
+occupe alors tout l'écran. Dans le cas des gestionnaires en mosaïque, les
+fenêtres sont organisées comme si l’écran était constitué de pavés. C’est-à-dire
+que les fenêtres ne se superposent pas mais se juxtaposent.
+
+Dans ce projet on veut organiser les fenêtres d'un bureau comme les feuilles
+d'un arbre binaire. Chaque noeud interne est une division de l'espace en deux
+sous-parties, soit horizontalement soit verticalement, qui peuvent être de
+tailles différentes. Ces deux sous-parties peuvent être elles-mêmes des fenêtres
+ou des divisions.
+
+Parmi toutes les fenêtres affichées, l'une d'entre elles est distinguée. C'est la
+fenêtre active, celle qui a le /focus/. C'est celle qui normalement reçoit les
+événements comme les frappes au clavier ou les clics de souris. Nous
+distinguerons la fenêtre active graphiquement par sa bordure qui sera d'une
+couleur différente des autres. Pour représenter cet arbre avec un focus, nous
+utiliserons un /zipper d'arbre binaire/ qui aura comme curseur la feuille qui
+représente la fenêtre active.
+
+Pour simplifier le problème, on ne travaillera pas sur de réelles fenêtres
+d'application pour cette preuve de concept. On dessinera nos fenêtres comme des
+rectangles colorés, identifiées chacune par un nom affichable, sur un canvas
+d'une taille prédéfinie. On utilisera la bibliothèque =Graphics= pour gérer
+l'affichage ainsi que la lecture des frappes clavier.
+
+Votre travail est d'implémenter les fonctions nécessaires pour faire fonctionner
+ce prototype.
+
+* Organisation
+
+Vous devez suivre une organisation précise basée sur le [[https://gitlab.sorbonne-paris-nord.fr/][Gitlab de l'université]].
+Il faut y accéder au moins une fois, pour que votre compte soit initialisé et
+que nous puissions vous donner des droits. Si vous avez déjà accédé à
+=gitlab.sorbonne-paris-nord.org= ou à =chat.sorbonne-paris-nord.org= (le
+Mattermost) c'est bon. Vous devez commencer par former un binôme composé
+d'exactement deux personnes. Vous pouvez former des binômes entre deux groupes
+mais vous ne serez suivi par un enseignant de l'un des deux groupes.
+
+
+
+** Votre dépôt git sur le gitlab
+
+Vous devez ensuite créer un dépot *privé* sur ce Gitlab en cliquant sur /Fork/ (en
+anglais) ou /Créer une divergence/ (en français). Vous pouvez choisir librement
+son nom mais nous vous recommandons d'utiliser au moins le texte
+"window-manager-zipper" dans celui-ci. Ses membres doivent être les deux membres
+de votre binôme et les trois enseignants dont les identifiants sont
+=joseph.leroux=, =baptiste.chanus= et =simon.mirwasser= avec un rôle =Maintainer=. Vous
+devez chacun et chacune avoir créé votre paire de clé ssh et avoir déposé la clé
+publique sur le serveur Gitlab (dans votre profill). Vous pouvez définir
+plusieurs clés ssh. Nous vous le recommandons en particulier lorsque vous
+utilisez plusieurs postes de travail, par exemple votre ordinateur personnel et
+votre compte en salle TP.
+
+Tout votre code source devra être déposé en utilisant git dans votre dépôt. Et
+uniquement le code source. Votre dépôt ne doit pas dépasser 1Mo de stockage,
+réfléchissez bien à ce que vous commitez. Nous lirons votre historique de
+commits pour comprendre votre progression, essayez de faire des messages courts
+et clairs. Pour démarrer avec git, nous vous rappelons quelques commandes de
+base :
+
+| Commandes                 | Signification                                                             |
+|---------------------------+---------------------------------------------------------------------------|
+| =git clone url=             | une seule fois pour récupérer le dépot                                    |
+| =git pull=                  | modifier le dépot local avec la version actuellement sur le serveur       |
+| =git add fic=               | pour ajouter un fichier nommé =fic= dans son état actuel au prochain commit |
+| =git commit -m message=   | pour effectuer un commit avec le message donné                            |
+| =git push=                  | pousser sur le serveur vos modifications locales                          |
+| =git add -u=                | ajouter toutes les modifications de fichiers déjà dans le dépot           |
+
+
+La puissance de git se révèle quand on utilise les branches mais nous n'entrons
+pas dans le détail pour le moment. Commencez par écrire un =README.md= (ou
+=README.org= si vous aimez [[https://xkcd.com/378/][Emacs]]), dans lequel vous raconterez à quelle étape vous
+en êtes de votre projet.
+
+
+** Déclaration du binôme
+
+En plus de créer votre dépôt git vous devez créer un [[https://gitlab.sorbonne-paris-nord.fr/2023_pripro_projets_public/ocamlwm23/-/issues/new][ticket de déclaration du
+binôme]]. Donnez vos nom, vos groupes de TP, le lien vers votre dépôt et le lien
+vers votre fichier =README.md= ou =README.org=. Vous pouvez suivre l'exemple donné
+dans [[https://gitlab.sorbonne-paris-nord.fr/2022_pripro_projets_public/ocamlgemini/-/issues/1][le ticket 1]]. Si vous n'avez pas accès aux tickets ci-dessus pas de panique !
+Signalez vous (Mat- termost, mail) en donnant votre numéro étudiant et nous
+vous ouvrirons l'accès rapidement.
+
+
+* Progression
+
+** Première étape
+Vous avez un binôme, un dépôt sur le gitlab de l'université et un ticket de
+suivi de votre travail et le 5 avril vous saurez quel enseignant vous suit. Vous
+aurez alors terminé la première étape.
+
+** Dune
+
+La seconde étape consiste en prendre en main l'environnement Dune pour le
+développement de projet en OCaml. Pour cela nous vous avons préparé un template
+sous la forme d'un projet minimal, que vous pourrer copier comme point de départ
+de votre dépôt.
+Pour compiler tapez simplement la commande suivante.
+
+#+begin_src bash
+dune build
+#+end_src
+
+Les tests unitaires doivent /passer/ sans erreur avec la commande:
+
+#+begin_src bash
+dune runtest
+#+end_src
+
+Toutes les dépendances sont a priori déjà installées en salles TP, mais si vous avez besoin d'une bibliothèque supplémentaire, contactez [[mailto:leroux@lipn.fr][votre enseignant]].
+Pour lancer votre programme:
+
+#+begin_src bash
+dune exec ocamlwm23
+#+end_src
+
+Le code comporte le programme =ocamlwm23= dans le répertoire =bin= et des bibliothèques de fonctions dans =lib=:
+- =Color= qui contient quelques fonctions simples pour manipuler les couleurs
+- =Tree= qui est /la pièce de résistance/ de ce projet et qui contient toutes les fonctions pour manipuler les arbres binaires et les zippers associés
+- =Wm= qui spécialise le type arbre pour notre cas d'usage
+
+Chaque module contient un fichier d'interface =mli= et un fichier d'implémentation
+=ml=. Vous ne devez pas modifier les fichiers =mli=. Pour finir la deuxième étape,
+vous devez implémenter le module =Color=. La troisième étape est l'implémentation
+du module =Tree=, la quatrième celle du module =Wm=. La cinquième partie consiste à
+implémenter le gestionnaire lui-même. Bien sûr, rien n'empêche de travailler sur
+plusieurs étapes simultanément, ou de revenir à une étape antérieure afin de
+l'améliorer ou de corriger un bug.
+
+
+** Design
+
+Le fichier =Tree.ml= contient la définition des types génériques pour les arbres et les zippers, ainsi que les fonctions de manipulation usuelles.
+Le fichier =Wm= spécialise ce type avec des arbres où
+1. les feuilles contiennent des fenêtres (texte et couleur) avec coordonnées (position et taille);
+2. les noeuds internes contiennent les informations d'une sous-partie de l'écran: le partage (vertical ou horizontal, et selon quelle proportion) ainsi que des coordonnées qui indiquent où commence cette sous-partie et quelle est sa taille.
+
+Le fichier =ocamlwm23= implémente le programme et contient principalement la boucle événementiel qui attend les frappes clavier de l'utilisateur pour accomplir les différentes actions:
+- création d'une nouvelle fenêtre en divisant la fenêtre actuelle en deux, horizontalement ou verticalement,
+- déplacement du focus sur une autre fenêtre,
+- modification de la taille de la fenêtre courante
+- destruction de la fenêtre courante
+- fin du programme
+
+Cette boucle fera appel aux fonction de zipper qui retourne des =option= sur zippers. Vous devez implementer les différentes actions en chaînant ces fonctions avec la =monade option=.
+
+
+** Amélioration
+
+De nombreuses améliorations sont possibles.
+Par exemple:
+- maximiser la fenêtre active, puis revenir à la mosaïque
+- avoir plusieurs bureaux virtuels
+- sauvegarder la configuration des fenêtres dans un fichier et pouvoir la recharger au redémarrage du gestionnaire de fenêtres
+- \dots
+
+Ces améliorations seront l'occasion d'obtenir des points supplémentaires.
+
+
+
+* Livrables
+
+
+Le rendu de votre projet est votre dépôt git. Il doit contenir un README qui
+explique ce qui fonctionne et ce qui ne fonctionne pas ainsi que votre démarche.
+Pensez à expliquer comment vous avez implémenter les différentes actions ainsi que les améliorations que vous avez apportées.
+Vous devez également fournir le mode d'emploi de votre logiciel.
+Ne copiez pas votre code ailleurs, sans le comprendre. En cas de doute de notre
+part sur l'originalité de votre travail nous vous interrogerons à l'oral.
+Nous évaluerons votre travail le *10 mai* à partir de *9h heure de Paris*. Il faut
+donc que vous l'ayiez terminé avant.
+Vous pourrez peut-être continuer à l'améliorer ensuite, mais il faudra le signaler
+sur votre ticket de déclaration de binôme et vérifier avec l'enseignant qui vous suivra
+de combien de temps vous disposez. Nous n'évaluerons pas les travaux au delà de la
+date du partiel, le *15 mai*.
+
+Nous sommes là pour vous aider ! N'hésitez pas à poser des questions.
+Cependant, il est fortement recommandé de ne pas vous y prendre au dernier moment.
+Tout projet qui ne compile pas aura la note minimale.
+De même, les tests unitaires des fonctions implémentées doivent être validés.

@@ -1,0 +1,12 @@
+lib: [
+  "_build/install/default/lib/ocamlwm23/META"
+  "_build/install/default/lib/ocamlwm23/dune-package"
+  "_build/install/default/lib/ocamlwm23/opam"
+]
+bin: [
+  "_build/install/default/bin/ocamlwm23"
+]
+doc: [
+  "_build/install/default/doc/ocamlwm23/README.md"
+  "_build/install/default/doc/ocamlwm23/README.org"
+]
